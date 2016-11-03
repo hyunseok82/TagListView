@@ -13,6 +13,7 @@ class ViewController: UIViewController, TagListViewDelegate {
     @IBOutlet weak var tagListView: TagListView!
     @IBOutlet weak var biggerTagListView: TagListView!
     @IBOutlet weak var biggestTagListView: TagListView!
+    @IBOutlet weak var customTagListView: TagListView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +59,24 @@ class ViewController: UIViewController, TagListViewDelegate {
         biggestTagListView.addTag("us")
         biggestTagListView.alignment = .Right
         
+        
+        customTagListView.backgroundColor = UIColor.clearColor()
+        customTagListView.delegate = self
+        customTagListView.textFont = UIFont.systemFontOfSize(14)
+        customTagListView.textColor = UIColor.grayColor()
+        customTagListView.selectedTextColor = UIColor.grayColor()
+        customTagListView.tagBackgroundColor = UIColor.darkGrayColor()
+        customTagListView.marginX = 5
+        customTagListView.marginY = 10
+        customTagListView.paddingX = 8
+        customTagListView.paddingY = 8
+        customTagListView.enableRemoveButton = true
+        customTagListView.removeButtonIconSize = 20
+        customTagListView.removeIconImage = UIImage(named: "tag_delete")
+        customTagListView.addTag("custom")
+        customTagListView.addTag("tag")
+        customTagListView.addTag("list")
+        customTagListView.addTag("view")
     }
     
     override func didReceiveMemoryWarning() {
@@ -68,7 +87,7 @@ class ViewController: UIViewController, TagListViewDelegate {
     // MARK: TagListViewDelegate
     func tagPressed(title: String, tagView: TagView, sender: TagListView) {
         print("Tag pressed: \(title), \(sender)")
-        tagView.selected = !tagView.selected
+        tagView.tagSelected = !tagView.tagSelected
     }
     
     func tagRemoveButtonPressed(title: String, tagView: TagView, sender: TagListView) {

@@ -13,10 +13,18 @@ internal class CloseButton: UIButton {
     var iconSize: CGFloat = 10
     var lineWidth: CGFloat = 1
     var lineColor: UIColor = UIColor.whiteColor().colorWithAlphaComponent(0.54)
-
-    weak var tagView: TagView?
+    var iconImage: UIImage? {
+        didSet {
+            self.setBackgroundImage(iconImage, forState: .Normal)
+        }
+    }
 
     override func drawRect(rect: CGRect) {
+        guard iconImage == nil else {
+            super.drawRect(rect)
+            return
+        }
+        
         let path = UIBezierPath()
 
         path.lineWidth = lineWidth

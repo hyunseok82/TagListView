@@ -180,6 +180,15 @@ public class TagListView: UIView {
         }
     }
     
+    @IBInspectable public dynamic var removeIconImage: UIImage? {
+        didSet {
+            for tagView in tagViews {
+                tagView.removeIconImage = removeIconImage
+            }
+            rearrangeViews()
+        }
+    }
+    
     @IBInspectable public dynamic var maxRow: UInt = UInt.max {
         didSet {
             rearrangeViews()
@@ -212,7 +221,7 @@ public class TagListView: UIView {
     public override func prepareForInterfaceBuilder() {
         addTag("Welcome")
         addTag("to")
-        addTag("TagListView").selected = true
+        addTag("TagListView").tagSelected = true
     }
     
     // MARK: - Layout
@@ -311,13 +320,14 @@ public class TagListView: UIView {
         tagView.removeButtonIconSize = removeButtonIconSize
         tagView.enableRemoveButton = enableRemoveButton
         tagView.removeIconLineColor = removeIconLineColor
-        tagView.addTarget(self, action: #selector(tagPressed(_:)), forControlEvents: .TouchUpInside)
+        tagView.removeIconImage = removeIconImage
+        tagView.tagButton.addTarget(self, action: #selector(tagPressed(_:)), forControlEvents: .TouchUpInside)
         tagView.removeButton.addTarget(self, action: #selector(removeButtonPressed(_:)), forControlEvents: .TouchUpInside)
         
         // On long press, deselect all tags except this one
         tagView.onLongPress = { this in
             for tag in self.tagViews {
-                tag.selected = (tag == this)
+                tag.tagSelected = (tag == this)
             }
         }
         
@@ -379,19 +389,23 @@ public class TagListView: UIView {
     }
 
     public func selectedTags() -> [TagView] {
-        return tagViews.filter() { $0.selected == true }
+        return tagViews.filter() { $0.tagSelected == true }
     }
     
     // MARK: - Events
     
-    func tagPressed(sender: TagView!) {
+    func tagPressed(tagButton: TagButton!) {
+        guard let sender = tagButton.superview as? TagView else {
+            return
+        }
         sender.onTap?(sender)
         delegate?.tagPressed?(sender.currentTitle ?? "", tagView: sender, sender: self)
     }
     
     func removeButtonPressed(closeButton: CloseButton!) {
-        if let tagView = closeButton.tagView {
-            delegate?.tagRemoveButtonPressed?(tagView.currentTitle ?? "", tagView: tagView, sender: self)
+        guard let sender = closeButton.superview as? TagView else {
+            return
         }
+        delegate?.tagRemoveButtonPressed?(sender.currentTitle ?? "", tagView: sender, sender: self)
     }
 }
