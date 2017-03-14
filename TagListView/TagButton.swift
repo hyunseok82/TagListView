@@ -29,12 +29,12 @@ internal class TagButton: UIButton {
         }
     }
     
-    var textColor: UIColor = UIColor.whiteColor() {
+    var textColor: UIColor = UIColor.white {
         didSet {
             reloadStyles()
         }
     }
-    var selectedTextColor: UIColor = UIColor.whiteColor() {
+    var selectedTextColor: UIColor = UIColor.white {
         didSet {
             reloadStyles()
         }
@@ -51,7 +51,7 @@ internal class TagButton: UIButton {
         }
     }
     
-    var tagBackgroundColor: UIColor = UIColor.grayColor() {
+    var tagBackgroundColor: UIColor = UIColor.gray {
         didSet {
             reloadStyles()
         }
@@ -76,32 +76,32 @@ internal class TagButton: UIButton {
     }
     
     private func reloadStyles() {
-        if highlighted {
+        if isHighlighted {
             if let highlightedBackgroundColor = highlightedBackgroundColor {
                 // For highlighted, if it's nil, we should not fallback to backgroundColor.
                 // Instead, we keep the current color.
                 backgroundColor = highlightedBackgroundColor
             }
         }
-        else if selected {
+        else if isSelected {
             backgroundColor = selectedBackgroundColor ?? tagBackgroundColor
-            layer.borderColor = selectedBorderColor?.CGColor ?? borderColor?.CGColor
-            setTitleColor(selectedTextColor, forState: .Normal)
+            layer.borderColor = selectedBorderColor?.cgColor ?? borderColor?.cgColor
+            setTitleColor(selectedTextColor, for: .normal)
         }
         else {
             backgroundColor = tagBackgroundColor
-            layer.borderColor = borderColor?.CGColor
-            setTitleColor(textColor, forState: .Normal)
+            layer.borderColor = borderColor?.cgColor
+            setTitleColor(textColor, for: .normal)
         }
     }
     
-    override internal var highlighted: Bool {
+    override internal var isHighlighted: Bool {
         didSet {
             reloadStyles()
         }
     }
     
-    override internal var selected: Bool {
+    override internal var isSelected: Bool {
         didSet {
             reloadStyles()
         }
